@@ -17,7 +17,7 @@ async def main():
 
     put_markdown("## 🧊 Добро пожаловать в чат Project M!")
 
-    #test git update2
+    #test git update23
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
