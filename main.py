@@ -55,6 +55,10 @@ async def auth():
 async def main():
     global chat_msgs
 
+<<<<<<< HEAD
+=======
+   
+>>>>>>> e9be7db782d78995bc1f3180358cd69d09c80d11
     put_markdown("## Project M")
     toast(" Прототип чата для защиты индивидуального проекта")
 
