@@ -22,7 +22,7 @@ cur.execute('''CREATE TABLE IF NOT EXISTS users (
             )''')
 
 
-#sss
+
 chat_msgs = []
 online_users = set()
 
@@ -30,11 +30,6 @@ MAX_MESSAGES_COUNT = 100
 
 
 async def reg():
-    global registering
-
-    if not registering:
-        return
-
     reg_login = input("Введите логин", required=True, placeholder="Логин" )
     reg_password = input("Введите пароль", required=True, placeholder="Пароль")
     reg_password_conf = input("Подтвердите пароль", required=True, placeholder="Пароль")
@@ -45,20 +40,15 @@ async def reg():
         put_text("Пароли не совпадают.")
 
 async def auth():
-    global registering
-
-    put_buttons(['Зарегистрироваться'], onclick=lambda btn: register())
+    put_buttons(['Зарегистрироваться'], onclick=lambda btn: reg())
     put_buttons(["Войти"], onclick=lambda btn: put_text("Авторизация"))
 
-def register():
-    global registering
-    registering = True
-    reg()
 
 async def main():
     global chat_msgs
 
-       put_markdown("## Project M")
+   
+    put_markdown("## Project M")
     toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
@@ -120,5 +110,4 @@ async def refresh_msg(nickname, msg_box):
 
 
 if __name__ == "__main__":
-    registering = False
     start_server(auth, debug=True, port=8080, cdn=False)
