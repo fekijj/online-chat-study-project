@@ -16,8 +16,10 @@ MAX_MESSAGES_COUNT = 100
 async def main():
     global chat_msgs
 
+    put_html('<style>body {background-image: url("https://catherineasquithgallery.com/uploads/posts/2023-02/1676606665_catherineasquithgallery-com-p-zelenii-fon-gta-29.jpg");}</style>>')
+
     put_markdown("## Project M")
-    toast("Прототип чата для защиты индивидуального проекта")
+    toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
