@@ -17,7 +17,7 @@ async def main():
     global chat_msgs
 
     put_markdown("## Project M")
-    toast(" Прототип чата для защиты индивидуального проекта")
+    toast("Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
