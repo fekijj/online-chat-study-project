@@ -5,6 +5,22 @@ from pywebio.input import *
 from pywebio.output import *
 from pywebio.session import defer_call, info as session_info, run_async, run_js
 import datetime
+import sqlite3
+
+# Подключение к базе данных (если файл не существует, он будет создан)
+conn = sqlite3.connect('db.db')
+
+# Создание курсора для выполнения SQL-запросов
+cur = conn.cursor()
+
+# Создание таблицы 'users' для хранения информации о пользователях
+cur.execute('''CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                Nickname TEXT,
+                Password TEXT,
+                Online INTEGER
+            )''')
+
 
 
 chat_msgs = []
@@ -13,11 +29,38 @@ online_users = set()
 MAX_MESSAGES_COUNT = 100
 
 
+async def reg():
+    global registering
+
+    if not registering:
+        return
+
+    reg_login = input("Введите логин", required=True, placeholder="Логин" )
+    reg_password = input("Введите пароль", required=True, placeholder="Пароль")
+    reg_password_conf = input("Подтвердите пароль", required=True, placeholder="Пароль")
+
+    if reg_password == reg_password_conf:
+        put_text("Регистрация успешна.")
+    else:
+        put_text("Пароли не совпадают.")
+
+async def auth():
+    global registering
+
+    put_buttons(['Зарегистрироваться'], onclick=lambda btn: register())
+    put_buttons(["Войти"], onclick=lambda btn: put_text("Авторизация"))
+
+def register():
+    global registering
+    registering = True
+    reg()
+
 async def main():
     global chat_msgs
 
+   
     put_markdown("## Project M")
-    toast("Прототип чата для защиты индивидуального проекта")
+    toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
@@ -28,7 +71,7 @@ async def main():
 
     chat_msgs.append(('📢', f'`{nickname}` присоединился к чату!'))
     msg_box.append(put_markdown(f'📢 `{nickname}` присоединился к чату'))
-
+    
     refresh_task = run_async(refresh_msg(nickname, msg_box))
 
     while True:
@@ -45,6 +88,8 @@ async def main():
         msg_box.append(put_markdown(msg_with_time))
 
         chat_msgs.append((nickname, data['msg']))
+        
+
 
     refresh_task.close()
 
@@ -54,6 +99,7 @@ async def main():
     chat_msgs.append(('📢', f'Пользователь `{nickname}` покинул чат!'))
 
     put_buttons(['Перезайти'], onclick=lambda btn: run_js('window.location.reload()'))
+    
 
 
 async def refresh_msg(nickname, msg_box):
@@ -75,4 +121,5 @@ async def refresh_msg(nickname, msg_box):
 
 
 if __name__ == "__main__":
-    start_server(main, debug=True, port=8080, cdn=False)
+    registering = False
+    start_server(auth, debug=True, port=8080, cdn=False)
