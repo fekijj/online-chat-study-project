@@ -31,6 +31,7 @@ MAX_MESSAGES_COUNT = 100
 show_buttons = True  # Флаг, определяющий, нужно ли показывать кнопки регистрации и авторизации
 
 async def reg():
+    global reg_login
     reg_login = await input("Введите логин", required=True, placeholder="Логин" )
     reg_password = await input("Введите пароль", required=True, placeholder="Пароль")
     reg_password_conf = await input("Подтвердите пароль", required=True, placeholder="Пароль")
@@ -46,27 +47,23 @@ async def reg():
 async def auth():
     global show_buttons
     if show_buttons:
-        put_buttons(['Зарегистрироваться'], onclick=lambda btn: run_async(reg()))
-        put_buttons(["Войти"], onclick=lambda btn: put_text("Авторизация"))
+        reg_button = put_buttons(['Зарегистрироваться'], onclick=lambda btn: run_async(reg()))
+        login_button = put_buttons(["Войти"], onclick=lambda btn: put_text("Авторизация"))
     else:
-        put_text("Регистрация успешна. Кнопки скрыты.")
+        clear(reg_button)
+        clear(login_button)
 
 
 async def main():
     global chat_msgs
-
-<<<<<<< HEAD
-=======
-   
->>>>>>> e9be7db782d78995bc1f3180358cd69d09c80d11
+    global reg_login
     put_markdown("## Project M")
     toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
 
-    nickname = await input("Войти в чат", required=True, placeholder="Ваше имя",
-                           validate=lambda n: "Такой ник уже используется!" if n in online_users or n == '📢' else None)
+    nickname = reg_login
     online_users.add(nickname)
 
     chat_msgs.append(('📢', f'`{nickname}` присоединился к чату!'))
