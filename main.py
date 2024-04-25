@@ -4,7 +4,8 @@ from pywebio import start_server
 from pywebio.input import *
 from pywebio.output import *
 from pywebio.session import defer_call, info as session_info, run_async, run_js
-from pywebio import put_html
+import datetime
+
 
 chat_msgs = []
 online_users = set()
@@ -15,9 +16,8 @@ MAX_MESSAGES_COUNT = 100
 async def main():
     global chat_msgs
 
-    put_markdown("## 🧊 Добро пожаловать в чат Project M!")
-
-    #test git update23
+    put_markdown("## Project M")
+    toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
@@ -39,8 +39,11 @@ async def main():
 
         if data is None:
             break
+        current_time = datetime.datetime.now().strftime("%H:%M")
 
-        msg_box.append(put_markdown(f"`{nickname}`: {data['msg']}"))
+        msg_with_time = f"{current_time} {nickname}: {data['msg']}"
+        msg_box.append(put_markdown(msg_with_time))
+
         chat_msgs.append((nickname, data['msg']))
 
     refresh_task.close()
