@@ -58,8 +58,7 @@ def register():
 async def main():
     global chat_msgs
 
-   
-    put_markdown("## Project M")
+       put_markdown("## Project M")
     toast(" Прототип чата для защиты индивидуального проекта")
 
     msg_box = output()
