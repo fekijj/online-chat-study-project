@@ -37,14 +37,13 @@ async def reg():
     reg_password_conf = await input("Подтвердите пароль", required=True, placeholder="Пароль")
 
     if reg_password == reg_password_conf:
-        put_text("Регистрация успешна.")
         global show_buttons
         show_buttons = False
         await main()
     else:
         put_text("Пароли не совпадают.")
 
-async def auth():
+async def auth(self):
     global show_buttons
     if show_buttons:
         reg_button = put_buttons(['Зарегистрироваться'], onclick=lambda btn: run_async(reg()))
