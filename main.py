@@ -29,6 +29,7 @@ online_users = set()
 MAX_MESSAGES_COUNT = 100
 
 class auth_page:
+    #for update
     def __init__(self):
         self.reg_button = None
         self.login_button = None
