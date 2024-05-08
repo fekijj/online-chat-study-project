@@ -38,12 +38,31 @@ class auth_page:
 
         self.show_buttons()  # Показываем начальные кнопки
 
+    async def login(self, btn):
+        self.login = await input("Введите логин", required=True, placeholder="Логин")
+        self.password = await input("Введите пароль", required=True, placeholder="Пароль")
+
+        # Проверяем, существует ли пользователь с таким логином и паролем
+        cur.execute("SELECT * FROM users WHERE Nickname = ? AND Password = ?", (self.login, self.password))
+        user = cur.fetchone()
+
+        if user:
+            # Пользователь найден, вызываем вашу функцию
+            await self.main()
+        else:
+            put_text("Пользователь с таким логином и паролем не найден.")
+
+
+
+
     async def register(self, btn):
         self.reg_login = await input("Введите логин", required=True, placeholder="Логин")
-        reg_password = await input("Введите пароль", required=True, placeholder="Пароль")
-        reg_password_conf = await input("Подтвердите пароль", required=True, placeholder="Пароль")
+        self.reg_password = await input("Введите пароль", required=True, placeholder="Пароль")
+        self.reg_password_conf = await input("Подтвердите пароль", required=True, placeholder="Пароль")
 
-        if reg_password == reg_password_conf:
+        if self.reg_password == self.reg_password_conf:
+            cur.execute("INSERT INTO users (Nickname, Password) VALUES (?, ?)", (self.reg_login, self.reg_password))
+            conn.commit()
             put_text("Регистрация успешна.")
             self.hide_buttons()  # Скрываем кнопки регистрации и входа
             await self.main()
@@ -52,7 +71,7 @@ class auth_page:
 
     def show_buttons(self):
         self.reg_button = put_buttons(['Зарегистрироваться'], onclick=self.register)
-        self.login_button = put_buttons(["Войти"], onclick=lambda btn: put_text("Авторизация"))
+        self.login_button = put_buttons(["Войти"], onclick=self.login)
 
         # Добавляем кнопки в список buttons
         self.buttons.append(self.reg_button)
