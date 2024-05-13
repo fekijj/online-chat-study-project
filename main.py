@@ -81,7 +81,7 @@ class auth_page:
         for button in self.buttons:
             button.visible = False  # Скрываем каждую кнопку
 
-
+    #test
     async def main(self):
         global chat_msgs
         put_markdown("## Project M")
