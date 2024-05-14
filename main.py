@@ -19,14 +19,6 @@ cur.execute('''CREATE TABLE IF NOT EXISTS users (
                 Online INTEGER
             )''')
 
-# Создание таблицы 'messages' для хранения сообщений чата
-cur.execute('''CREATE TABLE IF NOT EXISTS messages (
-                id INTEGER PRIMARY KEY,
-                Nickname TEXT,
-                Message TEXT,
-                Time TEXT
-            )''')
-
 chat_msgs = []
 online_users = set()
 
@@ -51,7 +43,6 @@ class auth_page:
 
         if user:
             self.reg_login = self.login  # Пользователь найден, загружаем его сообщения из базы данных
-            await self.load_messages()
             await self.main()
         else:
             put_text("Пользователь с таким логином и паролем не найден.")
@@ -69,13 +60,6 @@ class auth_page:
             await self.main()
         else:
             put_text("Пароли не совпадают.")
-
-    async def load_messages(self):
-        # Загрузка сообщений пользователя из базы данных
-        cur.execute("SELECT * FROM messages WHERE Nickname = ?", (self.reg_login,))
-        messages = cur.fetchall()
-        for message in messages:
-            chat_msgs.append((message[1], message[2]))
 
     def show_buttons(self):
         self.reg_button = put_buttons(['Зарегистрироваться'], onclick=self.register)
@@ -146,7 +130,6 @@ async def refresh_msg(nickname, msg_box):
     last_idx = len(chat_msgs)
 
     while True:
-        await asyncio.sleep(1)
 
         for m in chat_msgs[last_idx:]:
             if m[0] != nickname:
