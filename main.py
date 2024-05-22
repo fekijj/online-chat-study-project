@@ -1,17 +1,17 @@
+import asyncio
 from pywebio import start_server
 from pywebio.input import *
 from pywebio.output import *
-from pywebio.session import run_js, run_async
+from pywebio.session import run_js, run_async  # Импортируем run_async
 import datetime
 import sqlite3
+import pywebio_battery as pwb
 
-from tornado.platform import asyncio
-
-# Подключение к базе данных (если файл не существует, он будет создан)
+# Подключение к базе данных
 conn = sqlite3.connect('db.db')
 cur = conn.cursor()
 
-# Создание таблицы 'users' для хранения информации о пользователях
+# Создание таблицы 'users'
 cur.execute('''CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
                 Nickname TEXT,
@@ -19,127 +19,108 @@ cur.execute('''CREATE TABLE IF NOT EXISTS users (
                 Online INTEGER
             )''')
 
-# Создание таблицы 'messages' для хранения сообщений чата
-cur.execute('''CREATE TABLE IF NOT EXISTS messages (
-                id INTEGER PRIMARY KEY,
-                Nickname TEXT,
-                Message TEXT,
-                Time TEXT
-            )''')
-
 chat_msgs = []
 online_users = set()
-
 MAX_MESSAGES_COUNT = 100
 
-class auth_page:
+class AuthPage:
     def __init__(self):
-        self.reg_button = None
-        self.login_button = None
-        self.buttons = []  # Хранение кнопок
-        self.reg_login = None  # Хранение логина пользователя
+        self.login = None
+        self.password = None
 
-        self.show_buttons()  # Отображение начальных кнопок
+    async def cookie_user(self):
+        put_text("Entering cookie_user method")  # Debug output
+        registered = await pwb.get_cookie("registered")
+        put_text(f"Registered cookie: {registered}")  # Debug output
+        if registered == "true":
+            self.login = await pwb.get_cookie("username")
+            self.password = await pwb.get_cookie("password")
+            put_text(f"Login: {self.login}, Password: {self.password}")  # Debug output
+            await self.main()
+        else:
+            self.show_buttons()
 
-    async def login(self, btn):
+    async def auth(self, btn):
+        put_text("Auth button clicked")  # Debug output
         self.login = await input("Введите логин", required=True, placeholder="Логин")
         self.password = await input("Введите пароль", required=True, placeholder="Пароль")
 
-        # Проверка существует ли пользователь с таким логином и паролем
         cur.execute("SELECT * FROM users WHERE Nickname = ? AND Password = ?", (self.login, self.password))
         user = cur.fetchone()
 
         if user:
-            self.reg_login = self.login  # Пользователь найден, загружаем его сообщения из базы данных
-            await self.load_messages()
+            await pwb.set_cookie("registered", "true", days=30)
+            await pwb.set_cookie("username", self.login, days=30)
+            await pwb.set_cookie("password", self.password, days=30)
             await self.main()
         else:
             put_text("Пользователь с таким логином и паролем не найден.")
 
     async def register(self, btn):
-        self.reg_login = await input("Введите логин", required=True, placeholder="Логин")
+        put_text("Register button clicked")  # Debug output
+        self.login = await input("Введите логин", required=True, placeholder="Логин")
         self.reg_password = await input("Введите пароль", required=True, placeholder="Пароль")
         self.reg_password_conf = await input("Подтвердите пароль", required=True, placeholder="Пароль")
 
         if self.reg_password == self.reg_password_conf:
-            cur.execute("INSERT INTO users (Nickname, Password) VALUES (?, ?)", (self.reg_login, self.reg_password))
+            cur.execute("INSERT INTO users (Nickname, Password) VALUES (?, ?)", (self.login, self.reg_password))
             conn.commit()
+            await pwb.set_cookie("registered", "true", days=30)
+            await pwb.set_cookie("username", self.login, days=30)
+            await pwb.set_cookie("password", self.reg_password, days=30)
             put_text("Регистрация успешна.")
-            self.hide_buttons()  # Скрываем кнопки регистрации и входа
             await self.main()
         else:
             put_text("Пароли не совпадают.")
 
-    async def load_messages(self):
-        # Загрузка сообщений пользователя из базы данных
-        cur.execute("SELECT * FROM messages WHERE Nickname = ?", (self.reg_login,))
-        messages = cur.fetchall()
-        for message in messages:
-            chat_msgs.append((message[1], message[2]))
-
     def show_buttons(self):
-        self.reg_button = put_buttons(['Зарегистрироваться'], onclick=self.register)
-        self.login_button = put_buttons(["Войти"], onclick=self.login)
-
-        # Добавляем кнопки в список buttons
-        self.buttons.append(self.reg_button)
-        self.buttons.append(self.login_button)
-
-    def hide_buttons(self):
-        for button in self.buttons:
-            button.visible = False  # Скрываем каждую кнопку
+        put_text("Showing buttons")  # Debug output
+        put_buttons(['Зарегистрироваться'], onclick=self.register)
+        put_buttons(["Войти"], onclick=self.auth)
+        put_text("Buttons added to the page")  # Debug output
 
     async def main(self):
         global chat_msgs
         put_markdown("## Project M")
-        toast(" Прототип чата для защиты индивидуального проекта")
+        toast("Прототип чата для защиты индивидуального проекта")
 
         msg_box = output()
         put_scrollable(msg_box, height=300, keep_bottom=True)
 
-        nickname = self.reg_login
-        online_users.add(nickname)
+        self.nickname = self.login
+        online_users.add(self.nickname)
 
-        chat_msgs.append(('📢', f'`{nickname}` присоединился к чату!'))
-        msg_box.append(put_markdown(f'📢 `{nickname}` присоединился к чату'))
-
-        refresh_task = run_async(refresh_msg(nickname, msg_box))
+        chat_msgs.append(('📢', f'`{self.nickname}` присоединился к чату!'))
+        msg_box.append(put_markdown(f'📢 `{self.nickname}` присоединился к чату'))
+    
+        refresh_task = run_async(refresh_msg(self.nickname, msg_box))
 
         while True:
             data = await input_group("💭 Новое сообщение", [
                 input(placeholder="Текст сообщения ...", name="msg"),
                 actions(name="cmd", buttons=["Отправить", {'label': "Выйти из чата", 'type': 'cancel'}])
-            ], validate=lambda m: ('msg', "Введите текст сообщения!") if m["cmd"] == "Отправить" and not m[
-                'msg'] else None)
+            ], validate=lambda m: ('msg', "Введите текст сообщения!") if m["cmd"] == "Отправить" and not m['msg'] else None)
 
             if data is None:
                 break
             current_time = datetime.datetime.now().strftime("%H:%M")
-
-            msg_with_time = f"{current_time} {nickname}: {data['msg']}"
+            msg_with_time = f"{current_time} {self.nickname}: {data['msg']}"
             msg_box.append(put_markdown(msg_with_time))
 
-            # Сохраняем сообщение в базе данных
-            cur.execute("INSERT INTO messages (Nickname, Message, Time) VALUES (?, ?, ?)",
-                        (nickname, data['msg'], current_time))
-            conn.commit()
-
-            chat_msgs.append((nickname, data['msg']))
-
+            chat_msgs.append((self.nickname, data['msg']))
+        
         refresh_task.close()
 
-        online_users.remove(nickname)
+        online_users.remove(self.nickname)
         toast("Вы вышли из чата!")
-        msg_box.append(put_markdown(f'📢 Пользователь `{nickname}` покинул чат!'))
-        chat_msgs.append(('📢', f'Пользователь `{nickname}` покинул чат!'))
+        msg_box.append(put_markdown(f'📢 Пользователь `{self.nickname}` покинул чат!'))
+        chat_msgs.append(('📢', f'Пользователь `{self.nickname}` покинул чат!'))
 
         put_buttons(['Перезайти'], onclick=lambda btn: run_js('window.location.reload()'))
 
-
 async def auth():
-    page = auth_page()
-    page.__init__()
-
+    page = AuthPage()
+    await page.cookie_user()
 
 async def refresh_msg(nickname, msg_box):
     global chat_msgs
@@ -149,15 +130,14 @@ async def refresh_msg(nickname, msg_box):
         await asyncio.sleep(1)
 
         for m in chat_msgs[last_idx:]:
-            if m[0] != nickname:
-                msg_box.append(put_markdown(f"`{m[0]}`: {m[1]}"))
+            if m[0] != nickname:  # if not a message from current user
+                msg_box.append(put_markdown(f"`{m[0]}`: {m[1]}`"))
 
         # remove expired
         if len(chat_msgs) > MAX_MESSAGES_COUNT:
             chat_msgs = chat_msgs[len(chat_msgs) // 2:]
 
         last_idx = len(chat_msgs)
-
 
 if __name__ == "__main__":
     start_server(auth, debug=True, port=8080, cdn=False)
