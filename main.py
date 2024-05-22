@@ -29,6 +29,7 @@ class AuthPage:
         self.password = None
 
     async def cookie_user(self):
+        #put text as debug
         put_text("Entering cookie_user method")  # Debug output
         registered = await pwb.get_cookie("registered")
         put_text(f"Registered cookie: {registered}")  # Debug output
