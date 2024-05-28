@@ -14,8 +14,8 @@
         <form id="message-form">
             <input type="text" id="message-input" placeholder="Enter your message...">
             <button type="submit">Send</button>
+            <button id="logout-btn">Exit</button>
         </form>
-        <button id="logout-btn">Exit</button> <!-- Кнопка выхода -->
     </div>
     <script>
         const socket = io();
@@ -41,9 +41,8 @@
             messageInput.value = '';
         });
 
-        // Обработчик для кнопки выхода
         document.getElementById('logout-btn').addEventListener('click', () => {
-            window.location.href = '/'; // Перенаправляем пользователя на главную страницу
+            window.location.href = '/';
         });
     </script>
 </body>

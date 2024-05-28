@@ -1,53 +1,110 @@
 body {
-    font-family: Arial, sans-serif;
-    background-image: url('fon.png');
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     margin: 0;
     padding: 0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
+
 h1 {
     text-align: center;
     margin-top: 20px;
+    color: #333;
 }
+
+
+
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
 }
+
 label {
     margin-top: 10px;
+    font-weight: bold;
 }
+
 input {
     margin-top: 5px;
     padding: 10px;
     width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
+
 button {
     margin-top: 20px;
     padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+button:hover {
+    background-color: #0056b3;
+}
+
 #chat {
+    width: 62%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.192);
 }
+
+
 #messages {
-    width: 50%;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.192);
+    width: 60%;
     height: 300px;
     overflow-y: scroll;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
+    padding: 8px;
     margin-bottom: 20px;
+    border-radius: 10px;
 }
+
 #message-form {
+    background: rgba(255, 255, 255, 0.192);
     display: flex;
+    width: 58%;
+    align-items: center; /* Располагаем элементы по верхнему краю */
+    flex-direction:column; /* Располагаем элементы вертикально */
 }
+
 #message-input {
-    flex: 1;
+    width: 74%; /* Растягиваем инпут на всю доступную ширину */
     padding: 10px;
-    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Добавляем отступ снизу */
 }
+
 a.button {
     display: inline-block;
     padding: 10px 20px;
@@ -59,9 +116,126 @@ a.button {
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
+
 a.button:hover {
     background-color: #0056b3;
 }
+
 .buttons {
     text-align: center;
+    margin-top: 20px;
+}
+
+h2, h3 {
+    color: #666;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li::before {
+    content: "✔️";
+    margin-right: 10px;
+    color: #007BFF;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.screenshots {
+    margin-top: 40px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+    animation-delay: 1s;
+}
+
+.screenshot-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.screenshot {
+    flex: 1;
+    min-width: 280px;
+    max-width: 300px;
+    text-align: center;
+}
+
+.screenshot img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.screenshot p {
+    margin-top: 10px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .screenshot-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    margin: 8px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+}
+
+.message strong {
+    color: #007BFF;
+}
+
+.message:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid rgba(255, 255, 255, 0.8);
+}
+
+.message.mine {
+    align-self: flex-end;
+    background-color: rgba(0, 123, 255, 0.8);
+}
+
+.message.mine:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid rgba(0, 123, 255, 0.8);
 }

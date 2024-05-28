@@ -7,12 +7,39 @@
     <title>Home</title>
 </head>
 <body>
-    <div class="buttons">
-        <h1>Welcome to the Chat App</h1>
-        <h2>This is only a prototype, please do not judge too much!</h2>
-        <h3>We welcome your feedback!!!</h3>
-        <a href="{{ url_for('login') }}" class="button">Login</a>
-        <a href="{{ url_for('register') }}" class="button">Register</a>
+    <div class="container">
+        <div class="intro">
+            <h1>Welcome to the Chat App</h1>
+            <h2>This is only a prototype, please do not judge too much!</h2>
+            <p>This chat application is a learning project designed to demonstrate basic web development and real-time communication capabilities. Feel free to explore and provide your feedback.</p>
+            <h3>Features:</h3>
+            <ul>
+                <li>Real-time messaging</li>
+                <li>User authentication (login and registration)</li>
+                <li>Responsive design</li>
+            </ul>
+            <div class="buttons">
+                <a href="{{ url_for('login') }}" class="button">Login</a>
+                <a href="{{ url_for('register') }}" class="button">Register</a>
+            </div>
+        </div>
+        <div class="screenshots">
+            <h2>App Screenshots</h2>
+            <div class="screenshot-container">
+                <div class="screenshot">
+                    <img src="{{ url_for('static', filename='css/images/login_image.png') }}" alt="Login Screen">
+                    <p>Login Screen</p>
+                </div>
+                <div class="screenshot">
+                    <img src="{{ url_for('static', filename='css/images/reg_image.png') }}" alt="Register Screen">
+                    <p>Register Screen</p>
+                </div>
+                <div class="screenshot">
+                    <img src="{{ url_for('static', filename='css/images/chat_image.png') }}" alt="Chat Screen">
+                    <p>Chat Screen</p>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
