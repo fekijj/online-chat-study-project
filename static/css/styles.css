@@ -10,6 +10,22 @@ body {
     min-height: 100vh;
 }
 
+.glass-effect, form, #chat, #messages, #message_form, #message_input {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.animation, form, #chat, #mesagges, #message_form, #message_input, h1, h2, h3, .screenshots{
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+}
+
 h1 {
     text-align: center;
     margin-top: 20px;
@@ -23,14 +39,7 @@ form {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    background: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1s forwards;
-    animation-delay: 0.5s;
 }
 
 label {
@@ -67,20 +76,10 @@ button:hover {
     flex-direction: column;
     align-items: center;
     padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1s forwards;
-    animation-delay: 0.5s;
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.192);
 }
 
 
 #messages {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.192);
     width: 60%;
     height: 300px;
     overflow-y: scroll;
@@ -90,19 +89,26 @@ button:hover {
 }
 
 #message-form {
-    background: rgba(255, 255, 255, 0.192);
     display: flex;
     width: 58%;
-    align-items: center; /* Располагаем элементы по верхнему краю */
-    flex-direction:column; /* Располагаем элементы вертикально */
+    align-items: center;
+    justify-content: space-between;
 }
 
-#message-input {
-    width: 74%; /* Растягиваем инпут на всю доступную ширину */
+#message_input {
+    flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px; /* Добавляем отступ снизу */
+    margin-right: 10px;
+}
+
+#submit, #logout-btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+#logout {
+    background-color: red;
+    color: white;
 }
 
 a.button {
@@ -129,9 +135,6 @@ a.button:hover {
 h2, h3 {
     color: #666;
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1s forwards;
-    animation-delay: 0.5s;
 }
 
 ul {
@@ -154,9 +157,6 @@ ul li::before {
     margin-top: 40px;
     text-align: center;
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 1s forwards;
-    animation-delay: 1s;
 }
 
 .screenshot-container {

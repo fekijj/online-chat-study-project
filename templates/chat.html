@@ -33,20 +33,12 @@
             document.getElementById('messages').appendChild(messageDiv);
         });
 
-        document.getElementById('send_message').addEventListener('click', function() {
-            const messageInput = document.getElementById('message_input');
-            const message = messageInput.value.trim();
-    
-            if (message) {
-                socket.emit('send_message', {
-                    username: username,
-                    room: room,
-                    message: message
-                });
-                messageInput.value = '';
-            } else {
-                alert('Message cannot be empty');
-            }
+        document.getElementById('message-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value;
+            socket.emit('send_message', {username: username, message: message, room: room});
+            messageInput.value = '';
         });
 
         document.getElementById('logout-btn').addEventListener('click', () => {
