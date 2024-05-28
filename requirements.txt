@@ -1,4 +1,6 @@
-Flask==2.0.1
-Flask-SocketIO==5.1.1
-python-dotenv==0.19.0
-eventlet==0.30.2
+Flask==3.0.3
+Flask-SocketIO==6.0.1
+Werkzeug==3.0.1
+python-socketio==6.1.0
+eventlet==0.34.1
+sqlite3==3.36.0
