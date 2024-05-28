@@ -58,13 +58,11 @@ Here are some screenshots of the application:
 
 3. **Activate the virtual environment**
 
-    On windows :
-
+    **On windows :**
         ```bash
         venv\Scripts\activate
 
-    On macOS and Linux :
-    
+    **On macOS and Linux**
         ```bash
         source venv/bin/activate
 
