@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <div id="chat">
+        <div id="messages"></div>
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Enter your message...">
+            <button type="submit">Send</button>
+        </form>
+        <button id="logout-btn">Exit</button> <!-- Кнопка выхода -->
+    </div>
+    <script>
+        const socket = io();
+
+        const username = "{{ username }}";
+        const room = "main";
+
+        socket.on('connect', () => {
+            socket.emit('join_room', {username: username, room: room});
+        });
+
+        socket.on('receive_message', (data) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = `${data.username}: ${data.message}`;
+            document.getElementById('messages').appendChild(messageDiv);
+        });
+
+        document.getElementById('message-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value;
+            socket.emit('send_message', {username: username, message: message, room: room});
+            messageInput.value = '';
+        });
+
+        // Обработчик для кнопки выхода
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            window.location.href = '/'; // Перенаправляем пользователя на главную страницу
+        });
+    </script>
+</body>
+</html>
