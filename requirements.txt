@@ -1,6 +1,5 @@
 Flask==3.0.3
-Flask-SocketIO==6.0.1
-Werkzeug==3.0.1
-python-socketio==6.1.0
+Flask-SocketIO==5.3.6
+Werkzeug==3.0.3
+python-socketio==5.11.2
 eventlet==0.34.1
-sqlite3==3.36.0
