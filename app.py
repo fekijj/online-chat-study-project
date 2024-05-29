@@ -7,8 +7,12 @@ socketio = SocketIO(app)
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
-    app.logger.info("{} has sent message to the room {}: {}".format(data['username'], data['room'], data['message']))
-    emit('receive_message', data, room=data['room'])
+    if data['message'].strip() != "":
+        app.logger.info(f"{data['username']} has sent message to the room {data['room']}: {data['message']}")
+        emit('receive_message', data, room=data['room'])
+    else:
+        emit('error', {'error': 'Empty message'}, room=request.sid)
+
 
 @socketio.on('join_room')
 def handle_join_room_event(data):

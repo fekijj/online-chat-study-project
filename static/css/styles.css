@@ -78,7 +78,6 @@ button:hover {
     padding: 16px;
 }
 
-
 #messages {
     width: 60%;
     height: 300px;
@@ -91,25 +90,27 @@ button:hover {
 #message-form {
     display: flex;
     width: 58%;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
+    gap: 10px;
+    align-items: center;  /* Align items in the center */
 }
 
-#message_input {
-    flex: 1;
+#message-input {
+    width: 60%;
+    flex-grow: 1;
     padding: 10px;
     margin-right: 10px;
 }
 
 #submit, #logout-btn {
-    padding: 10px 20px;
     margin-right: 10px;
 }
 
-#logout {
+#logout-btn {
     background-color: red;
     color: white;
 }
+
 
 a.button {
     display: inline-block;

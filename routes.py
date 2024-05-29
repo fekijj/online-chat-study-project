@@ -38,3 +38,4 @@ def chat():
     if 'username' not in session:
         return redirect(url_for('login'))
     return render_template('chat.html', username=session['username'])
+
