@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from routes import app
 from database import init_db

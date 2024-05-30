@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Home</title>
+    <title>Project M</title>
 </head>
 <body>
     <div class="container">
         <div class="intro">
-            <h1>Welcome to the Chat App</h1>
-            <h2>This is only a prototype, please do not judge too much!</h2>
-            <p>This chat application is a learning project designed to demonstrate basic web development and real-time communication capabilities. Feel free to explore and provide your feedback.</p>
-            <h3>Features:</h3>
+            <h1>Project M</h1>
+            <h2>Это прототип, а не готовый продукт!</h2>
+            <p>Этот чат создан с целями демонстрации базовой веб-разработки и коммуникации в реальном времени.</p>
+            <h3>Особенности:</h3>
             <ul>
-                <li>Real-time messaging</li>
-                <li>User authentication (login and registration)</li>
-                <li>Responsive design</li>
+                <li>Чат в реальном времени</li>
+                <li>Аутентификация пользователей (регистрация и авторизация)</li>
+                <li>Приятный дизайн</li>
             </ul>
             <div class="buttons">
-                <a href="{{ url_for('login') }}" class="button">Login</a>
-                <a href="{{ url_for('register') }}" class="button">Register</a>
+                <a href="{{ url_for('login') }}" class="button">Авторизоваться</a>
+                <a href="{{ url_for('register') }}" class="button">Зарегистрироваться</a>
             </div>
         </div>
         <div class="screenshots">
-            <h2>App Screenshots</h2>
+            <h2>Демонстрация приложения</h2>
             <div class="screenshot-container">
                 <div class="screenshot">
                     <img src="{{ url_for('static', filename='css/images/login_image.png') }}" alt="Login Screen">
-                    <p>Login Screen</p>
+                    <p>Авторизация</p>
                 </div>
                 <div class="screenshot">
                     <img src="{{ url_for('static', filename='css/images/reg_image.png') }}" alt="Register Screen">
-                    <p>Register Screen</p>
+                    <p>Регистрация</p>
                 </div>
                 <div class="screenshot">
                     <img src="{{ url_for('static', filename='css/images/chat_image.png') }}" alt="Chat Screen">
-                    <p>Chat Screen</p>
+                    <p>Чат</p>
                 </div>
             </div>
         </div>
